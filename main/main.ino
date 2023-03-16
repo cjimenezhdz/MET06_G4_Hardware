@@ -18,6 +18,6 @@ void loop() {
   }
   temp_cont ++;
   
-  panic_loop();
+  //panic_loop();
 
 }
