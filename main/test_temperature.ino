@@ -30,6 +30,5 @@ void temperature_loop(){
 
   Serial.print("Temperatura= ");
   Serial.print(temp);
-  Serial.println(" ºC");
-  delay(5000);                               //monitorización cada 5 seg  = 5000ms                 
+  Serial.println(" ºC");                
 }

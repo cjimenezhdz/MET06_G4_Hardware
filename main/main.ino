@@ -1,3 +1,4 @@
+int temp_cont = 0;
 
 void setup() { 
 
@@ -11,7 +12,12 @@ void setup() {
 void loop() { 
 
   //presence_loop();
-  temperature_loop();
+  if (temp_cont == 5){    //monitorización cada 5seg
+    temperature_loop();
+    temp_cont = 0;
+  }
+  temp_cont ++;
+  
   panic_loop();
 
 }
