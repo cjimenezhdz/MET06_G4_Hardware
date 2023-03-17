@@ -1,8 +1,6 @@
 #include "DHT.h"
 
-#define DHTPIN 9     // Pin donde está conectado el sensor
-
-//#define DHTTYPE DHT11   // Descomentar si se usa el DHT 11
+#define DHTPIN 10     // Pin donde está conectado el sensor
 #define DHTTYPE DHT22   // Sensor DHT22
 
 DHT dht(DHTPIN, DHTTYPE);
@@ -19,13 +17,11 @@ void temp_hum_loop() {
 
   //--------Enviamos las lecturas por el puerto serial-------------
   
+  delay(1000);
   Serial.print("Humedad ");
   Serial.print(h);
   Serial.print(" % ");
   Serial.print("Temperatura: ");
   Serial.print(t);
   Serial.println(" ºC ");
-
-
-  
 }
