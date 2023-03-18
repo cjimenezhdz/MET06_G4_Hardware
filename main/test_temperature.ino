@@ -8,7 +8,7 @@ float temp;
 float temp_min = 20;
 float temp_max = 26;
 
-const int ledGREEN = 10;
+//const int ledGREEN = 10;
 
 void temperature_setup() { 
  
