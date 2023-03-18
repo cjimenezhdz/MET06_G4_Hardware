@@ -40,7 +40,6 @@ void temp_hum_loop() {
 
   //--------Enviamos las lecturas por el puerto serial-------------
   
-  delay(2000);                              // permitimos que se hagan lecturas correctas
   Serial.print("Humedad ");
   Serial.print(h);
   Serial.print(" % ");
