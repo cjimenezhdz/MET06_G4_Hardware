@@ -1,7 +1,7 @@
 
-const int ledBLUE = 13;
+const int ledBLUE = 3;
 
-const int buttonPin = 9;
+const int buttonPin = 13;
 int buttonState = 0;
 
 void panic_setup() { 
@@ -17,7 +17,6 @@ void panic_loop() {
 
   if( buttonState == HIGH){
     digitalWrite(ledBLUE, HIGH);  // turn the LED on (HIGH is the voltage level)
-    delay(5000);                  // keeps on HIGH the LED for 5 secs
   }else{
     digitalWrite(ledBLUE, LOW);  // turn the LED on (HIGH is the voltage level)
   }
