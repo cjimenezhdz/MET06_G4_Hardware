@@ -1,49 +1,72 @@
 #include <Servo.h>
 
-Servo Grifo;  // create servo object to control a servo
+Servo Grifo;  //create servo object to control a servo
 
-int buttonServoPin; //pendiente asignar puerto
-int buttonServoState;
+const int ServoPin = 15;
 
-int buttonServoEmergencyPin; // pendiente asignar puerto
-int buttonServoEmergencyState; 
+const int buttonServoPin = 14;  //pin del pulsador que regula el servo
+int buttonServoState = 0;     //estado del pulsador que regula el servo
 
-int servoCont=0;
+const int buttonServoEmergencyPin = 4;    //pin pulsador emergencia
+int buttonServoEmergencyState = 0;    //estado pulsador emergencia
 
-int ledYELLOW; // pendiente asignar puerto analógico
+int servoPos = 0;
+int servoMode = 0;
 
-void setup() {
-  Grifo.attach(4);  // attaches the servo on GIO2 to the servo object
+const int ledYELLOW = 16; 
+
+void servo_setup() {
+  Grifo.attach(ServoPin);                           // attaches the servo to SERVOPIN
+  pinMode(buttonServoPin, INPUT);
+  pinMode(buttonServoEmergencyPin, INPUT);
+  pinMode(ledYELLOW, OUTPUT);
 }
 
-void loop() {
-  int servoPos;
+void servo_loop() {
   
-  buttonServoState=digitalRead(buttonServoPin);
-  
-  if (buttonServoState=HIGH){
+  buttonServoState = digitalRead(buttonServoPin);
+  buttonServoEmergencyState = digitalRead(buttonServoEmergencyPin);
 
-    if(servoCont<3){       
-      for (pos=0;pos>=servoCont*90;pos +=90){
-        Grifo.write(pos);
-        delay(15);
-        analogWrite(ledYELLOW,pos);
-      }
-      servoCont++;
-    }else if(servoCont=3){
-      Grifo.write(0);
-      delay(15);
-      servoCont==0; 
-      analogWrite(ledYELLOW,0);
+  if (buttonServoEmergencyState == HIGH) {
+    servoMode = 0;
+    Grifo.write(servoMode);
+    digitalWrite(ledYELLOW, HIGH);
+    Serial.println("EMERGENCY");
+    return;
+  }
+
+  if (buttonServoState == HIGH) {
+    servoMode++;
+    if (servoMode > 2) {
+      servoMode = 0;
     }
+    delay(250);
   }
+
+  switch (servoMode) {
+    case 0:                           //GRIFO CERRADO
+      servoPos = 0;
+      digitalWrite(ledYELLOW, LOW);
+      break;
+    case 1:                           //GRIFO CAUDAL MEDIO
+      servoPos = 90;
+      analogWrite(ledYELLOW, 50);
+      delay(200);
+      analogWrite(ledYELLOW, 0);
+      delay(200);
+      break;
+    case 2:                           //GRIFO CAUDAL ALTO
+      servoPos = 180;
+      analogWrite(ledYELLOW, 255);
+      delay(100);
+      analogWrite(ledYELLOW, 0);
+      delay(100);
+      break;
+  }
+
+  Grifo.write(servoPos);
+  delay(15);
   
-  buttonServoEmergencyState=digitalRead(buttonServoEmergencyPin);
-  if (Button_statebuttonServoEmergencyState_emergencia=HIGH){
-    Grifo.write(0);
-    delay(15);
-    analogWrite(ledYELLOW,0);
-  }
 } 
     
     
