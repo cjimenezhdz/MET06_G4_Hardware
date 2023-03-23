@@ -1,4 +1,4 @@
-int pirPin = 8; 
+int pirPin = 13; 
 int pirState = 0;
 bool motionState = false;
 
