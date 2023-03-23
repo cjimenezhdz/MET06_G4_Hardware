@@ -7,13 +7,13 @@ const int ServoPin = 15;
 const int buttonServoPin = 14;  //pin del pulsador que regula el servo
 int buttonServoState = 0;     //estado del pulsador que regula el servo
 
-const int buttonServoEmergencyPin = 4;    //pin pulsador emergencia
+const int buttonServoEmergencyPin = 16;    //pin pulsador emergencia
 int buttonServoEmergencyState = 0;    //estado pulsador emergencia
 
 int servoPos = 0;
 int servoMode = 0;
 
-const int ledYELLOW = 16; 
+const int ledYELLOW = 4; 
 
 void servo_setup() {
   Grifo.attach(ServoPin);                           // attaches the servo to SERVOPIN
@@ -30,7 +30,7 @@ void servo_loop() {
   if (buttonServoEmergencyState == HIGH) {
     servoMode = 0;
     Grifo.write(servoMode);
-    digitalWrite(ledYELLOW, HIGH);
+    analogWrite(ledYELLOW, 100);
     Serial.println("EMERGENCY");
     return;
   }
@@ -40,13 +40,13 @@ void servo_loop() {
     if (servoMode > 2) {
       servoMode = 0;
     }
-    delay(250);
+    delay(1000);
   }
 
   switch (servoMode) {
     case 0:                           //GRIFO CERRADO
       servoPos = 0;
-      digitalWrite(ledYELLOW, LOW);
+      analogWrite(ledYELLOW, 0);
       break;
     case 1:                           //GRIFO CAUDAL MEDIO
       servoPos = 90;
