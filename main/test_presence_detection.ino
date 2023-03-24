@@ -5,7 +5,6 @@ int pirStateUp=0;
 
 
 void presence_setup() { 
-  //Serial.begin(9600);
   pinMode(pirPinDown, INPUT);
   pinMode(pirPinUp, INPUT);
 } 
