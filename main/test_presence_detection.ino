@@ -1,32 +1,36 @@
-int pirPin = 13; 
-int pirState = 0;
-bool motionState = false;
+int pirPinDown =5; 
+int pirStateDown=0;
+int pirPinUp =2; 
+int pirStateUp=0;
 
-const int ledRED = 5;
 
 void presence_setup() { 
   //Serial.begin(9600);
-  pinMode(pirPin, INPUT);
-  pinMode(ledRED, OUTPUT);
+  pinMode(pirPinDown, INPUT);
+  pinMode(pirPinUp, INPUT);
 } 
 
 void presence_loop() { 
-  pirState = digitalRead(pirPin); //read state of the PIR 
- 
-  if (pirState == HIGH) { 
-      digitalWrite(ledRED, HIGH);  // turn the LED on (HIGH is the voltage level)
-      delay(5000);
-      Serial.println("Motion!"); //if the value read is low, there  was no motion 
-      if (motionState = false){
-        motionState = true;
-      }
+  //pirStateDown = digitalRead(pirPinDown); //read state of the PIR 
+  pirStateUp = digitalRead(pirPinUp); //read state of the PIR 
+  
+ /* if (pirStateDown == HIGH) { 
+      
+      Serial.println("DOWNMotion!"); //if the value read is low, there  was no motion 
+      
   } else { 
-    digitalWrite(ledRED, LOW);  // turn the LED on (HIGH is the voltage level)
+    
+   // Serial.println("No motion"); //if the value read was high, there was motion 
+  }*/
+
+  if (pirStateUp == HIGH) { 
+      
+      Serial.println("UP Motion!"); //if the value read is low, there  was no motion 
+      
+  } else { 
+    
     Serial.println("No motion"); //if the value read was high, there was motion 
-    if (motionState = true){
-        motionState = false;
-      }
   } 
  
-  //delay(500); 
+  delay(500); 
 }
