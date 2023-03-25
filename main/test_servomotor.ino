@@ -2,7 +2,7 @@
 
 Servo Grifo;  //create servo object to control a servo
 
-const int ServoPin = 15;
+const int ServoPin = 5; //lo tenia en la 15
 
 const int buttonServoPin = 14;  //pin del pulsador que regula el servo
 int buttonServoState = 0;     //estado del pulsador que regula el servo
