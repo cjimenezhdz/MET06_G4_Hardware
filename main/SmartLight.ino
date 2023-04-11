@@ -8,8 +8,6 @@ const int ledLightSensor = 4;
 int LightState = 0;
 int LightMode = 0;
 
-boolean bucle=false;
-
 void SmartLight_setup() { 
  
   pinMode(button, INPUT);
@@ -21,7 +19,7 @@ void SmartLight_setup() {
 
 void SmartLight_loop() { 
 
-  while(!bucle){
+  while(true){
     buttonStateLight = digitalRead(button);
   
     if (buttonStateLight == HIGH) {
