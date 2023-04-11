@@ -5,8 +5,6 @@ int pirStateUp=0;
 float sensorDistance=0.5;
 float fallingTime=sqrt((2*sensorDistance)/9.8);
 
-boolean bucle=false;
-
 void presence_setup() { 
   pinMode(pirPinDown, INPUT);
   pinMode(pirPinUp, INPUT);
@@ -14,7 +12,7 @@ void presence_setup() {
 
 void presence_loop() { 
 
-  while(!bucle){
+  while(true){
     
     pirStateUp = digitalRead(pirPinUp); //read state of the PIR 
   
