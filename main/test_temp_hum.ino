@@ -13,6 +13,8 @@ const int led_RED = 16;
 
 DHT dht(DHTPIN, DHTTYPE);
 
+boolean bucle=false;
+
 void temp_hum_setup() {
   
   Serial.println("Iniciando...");
@@ -23,27 +25,32 @@ void temp_hum_setup() {
 }
 void temp_hum_loop() {
 
-  float h = dht.readHumidity(); //Leemos la Humedad
-  float t = dht.readTemperature(); //Leemos la temperatura en grados Celsius
-
-  if(t< t_min || t > t_max){
-      digitalWrite(ledGREEN, HIGH);           // turn the LED on (HIGH is the voltage level)
-    }else{
-      digitalWrite(ledGREEN, LOW);            // turn the LED on (HIGH is the voltage level)
-    }
-
-  if(h< h_min || h > h_max){
-      digitalWrite(led_RED, HIGH);           // turn the LED on (HIGH is the voltage level)
-    }else{
-      digitalWrite(led_RED, LOW);            // turn the LED on (HIGH is the voltage level)
-    }
-
-  //--------Enviamos las lecturas por el puerto serial-------------
+  while(!bucle){
+    float h = dht.readHumidity(); //Leemos la Humedad
+    float t = dht.readTemperature(); //Leemos la temperatura en grados Celsius
   
-  Serial.print("Humedad ");
-  Serial.print(h);
-  Serial.print(" % ");
-  Serial.print("Temperatura: ");
-  Serial.print(t);
-  Serial.println(" ºC ");
+    if(t< t_min || t > t_max){
+        digitalWrite(ledGREEN, HIGH);           // turn the LED on (HIGH is the voltage level)
+      }else{
+        digitalWrite(ledGREEN, LOW);            // turn the LED on (HIGH is the voltage level)
+      }
+  
+    if(h< h_min || h > h_max){
+        digitalWrite(led_RED, HIGH);           // turn the LED on (HIGH is the voltage level)
+      }else{
+        digitalWrite(led_RED, LOW);            // turn the LED on (HIGH is the voltage level)
+      }
+  
+    //--------Enviamos las lecturas por el puerto serial-------------
+    
+    Serial.print("Humedad ");
+    Serial.print(h);
+    Serial.print(" % ");
+    Serial.print("Temperatura: ");
+    Serial.print(t);
+    Serial.println(" ºC ");
+
+    delay(5000);
+    
+  }
 }
