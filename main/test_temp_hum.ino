@@ -49,5 +49,8 @@ void temp_hum_loop() {
     Serial.print("Temperatura: ");
     Serial.print(t);
     Serial.println(" ºC ");
+
+    delay(5000);
+    
   }
 }
