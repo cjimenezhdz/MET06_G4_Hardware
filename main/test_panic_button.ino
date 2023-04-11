@@ -1,5 +1,5 @@
 
-const int ledBLUE = 3;
+const int ledBLUE = 2;
 const int buttonPin = 13;
 int buttonState = 0;
 
