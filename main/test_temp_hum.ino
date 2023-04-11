@@ -7,6 +7,7 @@ float t_min = 20;
 float t_max = 24;
 float h_min = 0;
 float h_max = 85;
+int temp_cont = 0;
 
 const int ledGREEN = 4; //si ponemos el 9 deja de funcionar el DHT sensor
 const int led_RED = 16;
@@ -51,6 +52,6 @@ void temp_hum_loop() {
     Serial.println(" ºC ");
 
     delay(5000);
-    
+    temp_cont = 0;
   }
 }
