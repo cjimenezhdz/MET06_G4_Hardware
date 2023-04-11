@@ -15,8 +15,6 @@ int servoMode = 0;
 
 const int ledYELLOW = 4; 
 
-boolean bucle=false;
-
 void servo_setup() {
   Grifo.attach(ServoPin);                           // attaches the servo to SERVOPIN
   pinMode(buttonServoPin, INPUT);
@@ -26,7 +24,7 @@ void servo_setup() {
 
 void servo_loop() {
 
-  while(!bucle){
+  while(true){
     
     buttonServoState = digitalRead(buttonServoPin);
     buttonServoEmergencyState = digitalRead(buttonServoEmergencyPin);
