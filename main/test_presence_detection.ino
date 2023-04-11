@@ -5,6 +5,7 @@ int pirStateUp=0;
 float sensorDistance=0.5;
 float fallingTime=sqrt((2*sensorDistance)/9.8);
 
+boolean bucle=false;
 
 void presence_setup() { 
   pinMode(pirPinDown, INPUT);
@@ -12,36 +13,38 @@ void presence_setup() {
 } 
 
 void presence_loop() { 
-   
-  pirStateUp = digitalRead(pirPinUp); //read state of the PIR 
 
-  if (pirStateUp == HIGH) { 
-       delay(fallingTime);
-  }
-     /* Serial.println("UP Motion!"); //if the value read is low, there  was no motion 
-      
-  } else { 
+  while(!bucle){
     
-    Serial.println("UP No motion"); //if the value read was high, there was motion 
-  } */
+    pirStateUp = digitalRead(pirPinUp); //read state of the PIR 
   
- 
-  pirStateDown = digitalRead(pirPinDown); //read state of the PIR
-
-  /*
-  if (pirStateDown == HIGH) { 
+    if (pirStateUp == HIGH) { 
+         delay(fallingTime);
+    }
+       /* Serial.println("UP Motion!"); //if the value read is low, there  was no motion 
+        
+    } else { 
       
-      Serial.println("DOWNMotion!"); //if the value read is low, there  was no motion 
-      
-  } else { 
+      Serial.println("UP No motion"); //if the value read was high, there was motion 
+    } */
     
-   Serial.println("Down No motion"); //if the value read was high, there was motion 
-  }*/
-
-
-  if(pirStateUp==HIGH && pirStateDown==HIGH){
-    Serial.println("Caida Detectada");
+   
+    pirStateDown = digitalRead(pirPinDown); //read state of the PIR
+  
+    /*
+    if (pirStateDown == HIGH) { 
+        
+        Serial.println("DOWNMotion!"); //if the value read is low, there  was no motion 
+        
+    } else { 
+      
+     Serial.println("Down No motion"); //if the value read was high, there was motion 
+    }*/
+  
+    if(pirStateUp==HIGH && pirStateDown==HIGH){
+      Serial.println("Caida Detectada");
+    }
+    
   }
-
   
 }
