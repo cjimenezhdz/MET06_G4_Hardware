@@ -1,4 +1,3 @@
-
 const int button = 10;
 const int ledButton = 12;
 int buttonStateLight = 0;
@@ -8,6 +7,8 @@ const int LightSensor = 0;
 const int ledLightSensor = 4;
 int LightState = 0;
 int LightMode = 0;
+
+boolean bucle=false;
 
 void SmartLight_setup() { 
  
@@ -20,62 +21,35 @@ void SmartLight_setup() {
 
 void SmartLight_loop() { 
 
-  buttonStateLight = digitalRead(button);
-
-  if (buttonStateLight == HIGH) {
-    buttonModeLight++;
-    if (buttonModeLight > 3) {
-      buttonModeLight = 0;
-    }
-    delay(1000);
-  }
-
-
-  switch (buttonModeLight) {
-    case 0:                           
-      analogWrite(ledButton, 0);
-      Serial.println("Modo1");
-      break;
-    case 1:                           
-      analogWrite(ledButton, 50);
-      Serial.println("Modo2");
-      break;
-    case 2:                           
-      analogWrite(ledButton, 150);
-      Serial.println("Modo3");
-      break;
-    case 3:                          
-      analogWrite(ledButton, 250);
-      Serial.println("Modo4");
-      break;      
-  }
-
- /* LightState = digitalRead(LightSensor);
-
-
-  if (LightState == HIGH) {
-    LightMode++;
-    if (LightMode > 3) {
-      LightMode = 0;
-    }
-    delay(1000);
-  }
-
-
-  switch (LightMode) {
-    case 0:                           
-      analogWrite(LightMode, 0);
-      break;
-    case 1:                           
-      analogWrite(LightMode, 50);
-      break;
-    case 2:                           
-      analogWrite(LightMode, 150);
-      break;
-    case 3:                          
-      analogWrite(LightMode, 250);
-      break;      
-  }
-*/
+  while(!bucle){
+    buttonStateLight = digitalRead(button);
   
+    if (buttonStateLight == HIGH) {
+      buttonModeLight++;
+      if (buttonModeLight > 3) {
+        buttonModeLight = 0;
+      }
+      delay(1000);
+    }
+  
+  
+    switch (buttonModeLight) {
+      case 0:                           
+        analogWrite(ledButton, 0);
+        Serial.println("Modo1");
+        break;
+      case 1:                           
+        analogWrite(ledButton, 50);
+        Serial.println("Modo2");
+        break;
+      case 2:                           
+        analogWrite(ledButton, 150);
+        Serial.println("Modo3");
+        break;
+      case 3:                          
+        analogWrite(ledButton, 250);
+        Serial.println("Modo4");
+        break;      
+    }
+  }
 }
