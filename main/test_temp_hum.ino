@@ -14,8 +14,6 @@ const int led_RED = 16;
 
 DHT dht(DHTPIN, DHTTYPE);
 
-boolean bucle=false;
-
 void temp_hum_setup() {
   
   Serial.println("Iniciando...");
@@ -26,7 +24,7 @@ void temp_hum_setup() {
 }
 void temp_hum_loop() {
 
-  while(!bucle){
+  while(true){
     float h = dht.readHumidity(); //Leemos la Humedad
     float t = dht.readTemperature(); //Leemos la temperatura en grados Celsius
   
