@@ -3,8 +3,6 @@ const int ledBLUE = 3;
 const int buttonPin = 13;
 int buttonState = 0;
 
-boolean bucle=false;
-
 void panic_setup() { 
  
   pinMode(ledBLUE, OUTPUT);
@@ -14,7 +12,7 @@ void panic_setup() {
 
 void panic_loop() { 
 
- while(!bucle){
+ while(true){
     buttonState = digitalRead(buttonPin);
   
     if( buttonState == HIGH){
