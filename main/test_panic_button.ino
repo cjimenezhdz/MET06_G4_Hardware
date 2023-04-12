@@ -17,6 +17,7 @@ void panic_loop() {
   
     if( buttonState == HIGH){
       digitalWrite(ledBLUE, HIGH);  // turn the LED on (HIGH is the voltage level)
+      Serial.println("-------------BOTON PANICO!-------------");
     }else{
       digitalWrite(ledBLUE, LOW);  // turn the LED on (HIGH is the voltage level)
     }
