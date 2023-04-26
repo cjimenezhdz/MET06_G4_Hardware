@@ -1,6 +1,6 @@
 
-const int ledBLUE = 2;
-const int buttonPin = 13;
+const int ledBLUE = 12;
+const int buttonPin = 14;
 int buttonState = 0;
 
 void panic_setup() { 
