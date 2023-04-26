@@ -12,7 +12,6 @@ void panic_setup() {
 
 void panic_loop() { 
 
- while(true){
     buttonState = digitalRead(buttonPin);
   
     if( buttonState == HIGH){
@@ -21,5 +20,5 @@ void panic_loop() {
     }else{
       digitalWrite(ledBLUE, LOW);  // turn the LED on (HIGH is the voltage level)
     }
-  }
+    
 }
