@@ -1,6 +1,6 @@
 
-const int ledBLUE = 2;
-const int buttonPin = 13;
+const int ledBLUE = 12;
+const int buttonPin = 14;
 int buttonState = 0;
 
 void panic_setup() { 
@@ -12,7 +12,6 @@ void panic_setup() {
 
 void panic_loop() { 
 
- while(true){
     buttonState = digitalRead(buttonPin);
   
     if( buttonState == HIGH){
@@ -21,5 +20,5 @@ void panic_loop() {
     }else{
       digitalWrite(ledBLUE, LOW);  // turn the LED on (HIGH is the voltage level)
     }
-  }
+    
 }
