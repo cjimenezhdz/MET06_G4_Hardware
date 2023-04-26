@@ -1,7 +1,7 @@
 int pirPinUp=5; 
 int pirStateUp=0;
 
-int pirPinDown=13; 
+int pirPinDown=0; 
 int pirStateDown=0;
 
 float sensorDistance=0.25;
@@ -14,7 +14,7 @@ void presence_setup() {
 
 void presence_loop() { 
     
-  while(true){
+  //while(true){
 
     pirStateUp = digitalRead(pirPinUp); //read state of the PIR 
     pirStateDown = digitalRead(pirPinDown); //read state of the PIR
@@ -27,13 +27,13 @@ void presence_loop() {
      pirStateDown = digitalRead(pirPinDown); //read state of the PIR
           if(pirStateDown==HIGH){
           Serial.println("----------CAIDA DETECTADA------------");
-          delay(5000);
+          //delay(5000);
           }
     }else { 
       
       Serial.println("UP No motion"); //if the value read was high, there was motion 
     }
 
-  }
+  //}
 
 }
