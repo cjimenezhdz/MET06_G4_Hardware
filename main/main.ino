@@ -10,11 +10,9 @@ void setup() {
   // Preguntar al usuario qué loop quiere generar
   ///*
   Serial.println("¿Qué loop quieres generar? Escribe: \n"
-    "'1' -> Emergencia temperatura/humedad, \n"
-    "'2' -> Emergencia caída, \n"
-    "'3' -> Emergencia botón pánico, \n"
-    "'4' -> Smart Light, \n"
-    "'5' -> Grifo");
+    "'1' -> Emergencia temperatura/humedad, caída y botón pánico\n"
+    "'2' -> Smart Light, \n"
+    "'3' -> Grifo");
 
   // Leer la respuesta del usuario
   
@@ -24,24 +22,17 @@ void setup() {
     switch (input){
     case 1:
       temp_hum_setup();
+      //presence_setup();
+      //panic_setup();
       break;
     
     case 2:
-      presence_setup();
+      SmartLight_setup();
       break;
 
     case 3:
-      panic_setup();
-      break;
-
-    case 4:
-      SmartLight_setup();
-      break;
-    
-    case 5:
       servo_setup();
       break;
-
     }
     //*/
 }
@@ -51,26 +42,21 @@ void loop() {
 ///*
   switch (input){
     case 1:
-      temp_hum_loop();
+      while(true){
+        temp_hum_loop();
+        presence_loop();
+        panic_loop();
+      }
       break;
     
     case 2:
-      presence_loop();
+      SmartLight_loop();
       break;
 
     case 3:
-      panic_loop();
-      break;
-
-    case 4:
-      SmartLight_loop();
-      break;
-    
-    case 5:
       servo_loop();
       break;
 
-    
     default:
       Serial.println("Opción inválida, por favor intenta de nuevo");
       break;
