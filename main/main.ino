@@ -4,8 +4,6 @@ int input ;
 void setup() { 
   
   Serial.begin(9600);
-  //panic_setup();
-
 
   // Preguntar al usuario qué loop quiere generar
   ///*
@@ -22,10 +20,9 @@ void setup() {
     switch (input){
     case 1:
       temp_hum_setup();
-      //presence_setup();
-      //panic_setup();
+      presence_setup();
+      panic_setup();
       break;
-    
     case 2:
       SmartLight_setup();
       break;
@@ -34,19 +31,14 @@ void setup() {
       servo_setup();
       break;
     }
-    //*/
 }
 
 void loop() { 
-
-///*
   switch (input){
     case 1:
-      while(true){
         temp_hum_loop();
         presence_loop();
         panic_loop();
-      }
       break;
     
     case 2:
@@ -61,7 +53,4 @@ void loop() {
       Serial.println("Opción inválida, por favor intenta de nuevo");
       break;
   }
-//*/
-  
-  //panic_loop();
 }
