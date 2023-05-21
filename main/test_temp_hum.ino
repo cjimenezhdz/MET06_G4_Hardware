@@ -14,10 +14,6 @@ const unsigned long intervalo = 5000;
 const int ledGREEN = 4; //si ponemos el 9 deja de funcionar el DHT sensor
 const int led_RED = 16;
 
-unsigned long sendDataPrevMillis = 0;
-unsigned long count = 0;
-
-
 DHT dht(DHTPIN, DHTTYPE);
 
 void temp_hum_setup() {
@@ -29,8 +25,6 @@ void temp_hum_setup() {
   
 }
 void temp_hum_loop() {
-
-  //while(true){
 
   unsigned long tiempoActual = millis();
   
@@ -50,7 +44,7 @@ void temp_hum_loop() {
       }else{
         digitalWrite(led_RED, LOW);            // turn the LED on (HIGH is the voltage level)
       }
-  
+    
     //--------Enviamos las lecturas por el puerto serial-------------
     
     Serial.print("Humedad ");
@@ -60,14 +54,11 @@ void temp_hum_loop() {
     Serial.print(t);
     Serial.println(" ºC ");
 
+//--------Enviamos las lecturas al firebase-------------
 
-    if (Firebase.ready() && (millis() - sendDataPrevMillis > 15000 || sendDataPrevMillis == 0))
-  {
-    sendDataPrevMillis = millis();
-    
-    Serial.printf("Set humidity... %s\n", Firebase.RTDB.setFloat(&fbdo, F("/humidity/float"), h) ? "ok" : fbdo.errorReason().c_str());
-
+    if (Firebase.ready()){
+      Serial.printf("Set temperature... %s\n", Firebase.RTDB.setFloat(&fbdo, F("/temperature"), t) ? "ok" : fbdo.errorReason().c_str());
+      Serial.printf("Set humidity... %s\n", Firebase.RTDB.setFloat(&fbdo, F("/humidity"), h) ? "ok" : fbdo.errorReason().c_str());
+    }
   }
-
-  
 }
