@@ -14,6 +14,10 @@ const unsigned long intervalo = 5000;
 const int ledGREEN = 4; //si ponemos el 9 deja de funcionar el DHT sensor
 const int led_RED = 16;
 
+unsigned long sendDataPrevMillis = 0;
+unsigned long count = 0;
+
+
 DHT dht(DHTPIN, DHTTYPE);
 
 void temp_hum_setup() {
@@ -55,8 +59,15 @@ void temp_hum_loop() {
     Serial.print("Temperatura: ");
     Serial.print(t);
     Serial.println(" ºC ");
+
+
+    if (Firebase.ready() && (millis() - sendDataPrevMillis > 15000 || sendDataPrevMillis == 0))
+  {
+    sendDataPrevMillis = millis();
+    
+    Serial.printf("Set humidity... %s\n", Firebase.RTDB.setFloat(&fbdo, F("/humidity/float"), h) ? "ok" : fbdo.errorReason().c_str());
+
   }
-    //delay(5000);
 
   
 }

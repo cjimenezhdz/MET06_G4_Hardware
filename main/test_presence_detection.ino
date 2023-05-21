@@ -22,16 +22,16 @@ void presence_loop() {
     if (pirStateUp == HIGH && pirStateDown != HIGH) { 
       
      delay(fallingTime);
-     Serial.println("UP Motion!"); //if the value read is low, there  was no motion 
+    // Serial.println("UP Motion!"); //if the value read is low, there  was no motion 
           
      pirStateDown = digitalRead(pirPinDown); //read state of the PIR
           if(pirStateDown==HIGH){
-          Serial.println("----------CAIDA DETECTADA------------");
+          //Serial.println("----------CAIDA DETECTADA------------");
           //delay(5000);
           }
     }else { 
       
-      Serial.println("UP No motion"); //if the value read was high, there was motion 
+      //Serial.println("UP No motion"); //if the value read was high, there was motion 
     }
 
   //}
