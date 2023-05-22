@@ -7,7 +7,6 @@ const int LightSensor = 0;
 const int ledLightSensor = 4;
 
 int lightIntensity = 0;
-int firebaseIntensity = 0; 
 
 void SmartLight_setup() { 
  
@@ -44,13 +43,13 @@ void SmartLight_loop() {
         break;      
     }
 
-    if ( Firebase.ready()) {
+    if (Firebase.ready()) {
       Serial.printf("Set smart light intensity... %s\n", Firebase.RTDB.setFloat(&fbdo, F("/smartLight"), lightIntensity) ? "ok" : fbdo.errorReason().c_str());
     }
 
-  } else if ( Firebase.ready()) {
+  } else if (Firebase.ready()) {
       Serial.printf("Get int ref... %s\n", Firebase.RTDB.getInt(&fbdo, F("/smartLight"), &lightIntensity) ? String(lightIntensity).c_str() : fbdo.errorReason().c_str());
   }
-
-    analogWrite(ledButton, lightIntensity); // Actualizar la intensidad del LED
+  
+  analogWrite(ledButton, lightIntensity); // Actualizamos la intensidad del LED
 }
