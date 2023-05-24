@@ -5,7 +5,7 @@
 
 float t_min = 20;
 float t_max = 24;
-float h_min = 0;
+float h_min = 50;
 float h_max = 85;
 
 unsigned long tiempoAnterior = 0;
