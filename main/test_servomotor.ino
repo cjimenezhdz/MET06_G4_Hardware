@@ -24,17 +24,41 @@ void servo_setup() {
 
 void servo_loop() {
 
-  while(true){
-    
-    buttonServoState = digitalRead(buttonServoPin);
-    buttonServoEmergencyState = digitalRead(buttonServoEmergencyPin);
-  
-    if (buttonServoEmergencyState == HIGH) {
-      servoMode = 0;
-      Grifo.write(servoMode);
+  switch (servoMode) {
+    case 0:                           //GRIFO CERRADO
+      servoPos = 0;
+      analogWrite(ledYELLOW, 0);
+      break;
+    case 1:                           //GRIFO CAUDAL MEDIO
+      servoPos = 90;
+      analogWrite(ledYELLOW, 50);
+      /*delay(200);
+      analogWrite(ledYELLOW, 0);
+      delay(200);*/
+      break;
+    case 2:                           //GRIFO CAUDAL ALTO
+      servoPos = 180;
+      analogWrite(ledYELLOW, 255);
+      /*delay(100);
+      analogWrite(ledYELLOW, 0);
+      delay(100);*/
+      break;
+    case 3:                           //GRIFO CERRADO EMERGENCIA
+      servoPos = 0;
       analogWrite(ledYELLOW, 100);
+    }
+
+  Grifo.write(servoPos);
+  delay(15);
+
+  buttonServoState = digitalRead(buttonServoPin);
+  buttonServoEmergencyState = digitalRead(buttonServoEmergencyPin);
+  
+  if(buttonServoState==HIGH || buttonServoEmergencyState == HIGH){
+
+    if (buttonServoEmergencyState == HIGH) {
+      servoMode = 3;
       Serial.println("EMERGENCY");
-      return;
     }
   
     if (buttonServoState == HIGH) {
@@ -42,34 +66,18 @@ void servo_loop() {
       if (servoMode > 2) {
         servoMode = 0;
       }
-      delay(1000);
+      //delay(600);
+    }
+    
+    if (Firebase.ready()) {
+      Serial.printf("Set tap State... %s\n", Firebase.RTDB.setFloat(&fbdo, F("/tap"), servoMode) ? "ok" : fbdo.errorReason().c_str());
     }
   
-    switch (servoMode) {
-      case 0:                           //GRIFO CERRADO
-        servoPos = 0;
-        analogWrite(ledYELLOW, 0);
-        break;
-      case 1:                           //GRIFO CAUDAL MEDIO
-        servoPos = 90;
-        analogWrite(ledYELLOW, 50);
-        delay(200);
-        analogWrite(ledYELLOW, 0);
-        delay(200);
-        break;
-      case 2:                           //GRIFO CAUDAL ALTO
-        servoPos = 180;
-        analogWrite(ledYELLOW, 255);
-        delay(100);
-        analogWrite(ledYELLOW, 0);
-        delay(100);
-        break;
-    }
-  
-    Grifo.write(servoPos);
-    delay(15);
-
+  } else if (Firebase.ready()) {
+    
+    Serial.printf("Get int ref... %s\n", Firebase.RTDB.getInt(&fbdo, F("/tap"), &servoMode) ? String(servoMode).c_str() : fbdo.errorReason().c_str());
   }
-} 
-    
-    
+  
+  
+      
+}
