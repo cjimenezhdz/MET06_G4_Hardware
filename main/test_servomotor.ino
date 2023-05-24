@@ -15,6 +15,11 @@ int servoMode = 0;
 
 const int ledYELLOW = 4; 
 
+unsigned long tiempoParpadeoAnterior = 0;
+unsigned long tiempoParpadeoActual=0;
+const unsigned long intervaloCaudalAlto = 700;
+
+bool parpadeo=false;
 void servo_setup() {
   Grifo.attach(ServoPin);                           // attaches the servo to SERVOPIN
   pinMode(buttonServoPin, INPUT);
@@ -24,24 +29,32 @@ void servo_setup() {
 
 void servo_loop() {
 
+parpadeo=!parpadeo;
+
+tiempoParpadeoActual = millis();
   switch (servoMode) {
     case 0:                           //GRIFO CERRADO
       servoPos = 0;
       analogWrite(ledYELLOW, 0);
       break;
-    case 1:                           //GRIFO CAUDAL MEDIO
+    case 1:                           //GRIFO CAUDAL ALTO
       servoPos = 90;
-      analogWrite(ledYELLOW, 50);
-      /*delay(200);
-      analogWrite(ledYELLOW, 0);
-      delay(200);*/
+      if(tiempoParpadeoActual - tiempoParpadeoAnterior >= intervaloCaudalAlto){
+        analogWrite(ledYELLOW, 50);
+        Serial.println("encendido");
+        tiempoParpadeoAnterior = tiempoParpadeoActual;
+      }else{
+        analogWrite(ledYELLOW, 0);
+        Serial.println("apagado");
+      }
       break;
-    case 2:                           //GRIFO CAUDAL ALTO
+    case 2:                           //GRIFO CAUDAL MEDIO
       servoPos = 180;
-      analogWrite(ledYELLOW, 255);
-      /*delay(100);
-      analogWrite(ledYELLOW, 0);
-      delay(100);*/
+      if(parpadeo){
+        analogWrite(ledYELLOW, 255);
+      }else{
+        analogWrite(ledYELLOW, 0);
+      }
       break;
     case 3:                           //GRIFO CERRADO EMERGENCIA
       servoPos = 0;
@@ -49,7 +62,6 @@ void servo_loop() {
     }
 
   Grifo.write(servoPos);
-  delay(15);
 
   buttonServoState = digitalRead(buttonServoPin);
   buttonServoEmergencyState = digitalRead(buttonServoEmergencyPin);
@@ -66,7 +78,6 @@ void servo_loop() {
       if (servoMode > 2) {
         servoMode = 0;
       }
-      //delay(600);
     }
     
     if (Firebase.ready()) {
@@ -77,7 +88,5 @@ void servo_loop() {
     
     Serial.printf("Get int ref... %s\n", Firebase.RTDB.getInt(&fbdo, F("/tap"), &servoMode) ? String(servoMode).c_str() : fbdo.errorReason().c_str());
   }
-  
-  
-      
+    
 }
