@@ -44,7 +44,7 @@ void SmartLight_loop() {
     }
 
     if (Firebase.ready()) {
-      Serial.printf("Set smart light intensity... %s\n", Firebase.RTDB.setFloat(&fbdo, F("/smartLight"), lightIntensity) ? "ok" : fbdo.errorReason().c_str());
+      Serial.printf("Set smart light intensity... %s\n", Firebase.RTDB.setInt(&fbdo, F("/smartLight"), lightIntensity) ? "ok" : fbdo.errorReason().c_str());
     }
 
   } else if (Firebase.ready()) {
