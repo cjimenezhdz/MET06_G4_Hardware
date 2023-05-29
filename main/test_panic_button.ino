@@ -4,10 +4,16 @@ const int buttonPin = 14;
 int buttonState = 0;
 bool boolState = false;
 bool boolStateFirebase = false;
+bool lastFirebaseState = false;
+bool  buttonPress=false;
+bool FirebaseRead=false;
 
 unsigned long tiempoPanicoAnterior = 0;
-unsigned long tiempoPanicoActual=0;
+unsigned long tiempoPanicoActual = 0;
 const unsigned long intervaloPanico = 5000;
+int updateFirebase = 0;
+
+
 
 void panic_setup() { 
  
@@ -19,31 +25,33 @@ void panic_setup() {
 void panic_loop() { 
 
   buttonState = digitalRead(buttonPin); 
-
   tiempoPanicoActual = millis();
 
-  if(boolStateFirebase && !boolState){
-    digitalWrite(ledBLUE, HIGH);  // turn the LED on (HIGH is the voltage level)
-    boolStateFirebase = false;
-    tiempoPanicoAnterior = tiempoPanicoActual;
+  if (Firebase.ready()&& buttonPress==false && FirebaseRead==false){
+    Serial.printf("Get bool ref... %s\n", Firebase.RTDB.getBool(&fbdo, F("/emergency"), &boolStateFirebase) ? boolStateFirebase ? "true" : "false" : fbdo.errorReason().c_str());
+  }
 
-  }else if( buttonState == HIGH){
+  if(buttonState == HIGH){
     digitalWrite(ledBLUE, HIGH);  // turn the LED on (HIGH is the voltage level)
-    boolState = true;
+    boolStateFirebase = true;
     tiempoPanicoAnterior = tiempoPanicoActual;
-
     if (Firebase.ready()){
-      Serial.printf("Set emergency... %s\n", Firebase.RTDB.setBool(&fbdo, F("/emergency"), boolState) ? "ok" : fbdo.errorReason().c_str());
+      buttonPress=true;
+      Serial.printf("Set emergency... %s\n", Firebase.RTDB.setBool(&fbdo, F("/emergency"), boolStateFirebase) ? "ok" : fbdo.errorReason().c_str());
     }
-
+  }else if(boolStateFirebase){
+    digitalWrite(ledBLUE, HIGH);  // turn the LED on (HIGH is the voltage level)
+    tiempoPanicoAnterior = tiempoPanicoActual;
+    boolStateFirebase=false;
+    FirebaseRead=true;
   }else if(tiempoPanicoActual - tiempoPanicoAnterior >= intervaloPanico) {
     digitalWrite(ledBLUE, LOW);  // turn the LED on (HIGH is the voltage level)
-    boolState = false;
-    
-    if (Firebase.ready()){
-      Serial.printf("Set emergency... %s\n", Firebase.RTDB.setBool(&fbdo, F("/emergency"), boolState) ? "ok" : fbdo.errorReason().c_str());
-      Serial.printf("Get bool ref... %s\n", Firebase.RTDB.getBool(&fbdo, F("/emergency"), &boolStateFirebase) ? boolStateFirebase ? "true" : "false" : fbdo.errorReason().c_str());
+    boolStateFirebase = false;
+    FirebaseRead=false;
+    if (Firebase.ready()&& buttonPress){
+      Serial.printf("Set emergency... %s\n", Firebase.RTDB.setBool(&fbdo, F("/emergency"), boolStateFirebase) ? "ok" : fbdo.errorReason().c_str());
+      buttonPress=false;
     }
-  }    
-  
+  } 
+
 }
