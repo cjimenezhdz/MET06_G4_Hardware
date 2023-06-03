@@ -11,9 +11,6 @@ bool FirebaseRead=false;
 unsigned long tiempoPanicoAnterior = 0;
 unsigned long tiempoPanicoActual = 0;
 const unsigned long intervaloPanico = 5000;
-int updateFirebase = 0;
-
-
 
 void panic_setup() { 
  
