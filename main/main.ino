@@ -25,7 +25,7 @@ FirebaseConfig config;
 void setup() { 
   
   //Serial.begin(9600);
-  Serial.begin(115200);
+  Serial.begin(230400);
 
 /*---------------------------WIFI CONECTION-------------------------------*/ 
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
