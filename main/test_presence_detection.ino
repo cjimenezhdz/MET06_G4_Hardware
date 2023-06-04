@@ -10,6 +10,7 @@ float fallingTime=sqrt((2*sensorDistance)/9.8);  //1s
 unsigned long tiempoPresenciaAnterior = 0;
 unsigned long tiempoPresenciaActual = 0;
 const unsigned long intervaloPresencia = 5000;
+unsigned long tiempoDown=0;
 bool possible_fall=false;
 bool walking=false;
 
@@ -23,38 +24,57 @@ void presence_loop() {
 pirStateUp = digitalRead(pirPinUp); //read state of the PIR 
 pirStateDown = digitalRead(pirPinDown); //read state of the PIR
 
-
 if (pirStateUp == HIGH) { 
-     tiempoPresenciaActual = millis();
+      tiempoPresenciaActual = millis();      
+      Serial.println("*******************************UP Motion!****************************************");
       Serial.println(tiempoPresenciaActual);
-        Serial.println("*******************************UP Motion!****************************************");
     }
     
 if (pirStateDown == HIGH) { 
-     tiempoPresenciaActual = millis();
-      Serial.println(tiempoPresenciaActual);
-        Serial.println("*******************************DOWN Motion!****************************************");
+     tiempoPresenciaAnterior = millis();     
+     Serial.println("//////////////DOWN Motion!//////////");
+     Serial.println(tiempoPresenciaAnterior-tiempoPresenciaActual);
     }
-
     
+/*
+if (pirStateUp == HIGH && !possible_fall) { 
+      tiempoPresenciaActual = millis();      
+      Serial.println("*******************************UP Motion!****************************************");
+      Serial.println(tiempoPresenciaActual);
+      possible_fall=true;
+    }
+    
+if (pirStateDown == HIGH && possible_fall) { 
+     tiempoPresenciaAnterior = millis();     
+     Serial.println("//////////////DOWN Motion!//////////");
+     possible_fall=false;
+     Serial.println(tiempoPresenciaAnterior-tiempoPresenciaActual);
+    }else if (pirStateDown == HIGH){
 
-*/
+    Serial.println("-----------------NO CAIDA----------------");
+
+}
+
+*/   
+
+
     if(possible_fall){
       
       tiempoPresenciaActual = millis();
-      Serial.println(tiempoPresenciaActual);
-      
-
       pirStateDown = digitalRead(pirPinDown); //read state of the PIR
-
-      if(pirStateDown==HIGH && tiempoPanicoActual - tiempoPanicoAnterior <= 600){
+      tiempoDown = tiempoPresenciaActual - tiempoPresenciaAnterior;
       
+      if(pirStateDown==HIGH && tiempoDown <= 850){
         possible_fall=false;
-        Serial.println("*******************************ANDANDO!****************************************");
-      }else if(pirStateDown==HIGH && tiempoPanicoActual - tiempoPanicoAnterior >= 600){
-        Serial.println("*******************************Caida DETECTADA!****************************************");   
+        Serial.println(tiempoDown);
+        Serial.println("*******************************ANDANDOOOOOOOO!****************************************");
+      }else if(pirStateDown==HIGH && tiempoDown > 850 && tiempoDown < 3000){
+        Serial.println(tiempoDown);
+        Serial.println("-----------------Caida DETECTADA!------------------------");   
         possible_fall=false;
-      }else if(tiempoPanicoActual - tiempoPanicoAnterior >= 1000){
+      }else if(tiempoDown >= 3000){
+        Serial.println(tiempoDown);
+        Serial.println("///////////////////NADAAAAAAA!/////////////////////");
         possible_fall=false;
       }
       
@@ -67,52 +87,12 @@ if (pirStateDown == HIGH) {
         possible_fall=true;
         tiempoPresenciaAnterior = millis();
         Serial.println(tiempoPresenciaAnterior);
-        Serial.println("Hola desgraciado, estas YA CASI");
+        Serial.println("???????????????????????????????????????????????????????????????????????????????");
+    }else{
+        Serial.println("..........................................................?");
     }
     
     }
     
-    
-    /* 
-      
-     //delay(fallingTime);
-    // Serial.println("UP Motion!"); //if the value read is low, there  was no motion 
-
-    if(tiempoPresenciaActual - tiempoPresenciaAnterior >= fallingTime){
-      
-    
-     pirStateDown = digitalRead(pirPinDown); //read state of the PIR
-          if(pirStateDown==HIGH){
-          //Serial.println("----------CAIDA DETECTADA------------");
-          //delay(5000);
-          }
-    }else { 
-      
-      //Serial.println("UP No motion"); //if the value read was high, there was motion 
-    }
-
-
-    }
-
-
-/*
-    pirStateUp = digitalRead(pirPinUp); //read state of the PIR 
-    pirStateDown = digitalRead(pirPinDown); //read state of the PIR
-    
-    if (pirStateUp == HIGH && pirStateDown != HIGH) { 
-      
-     delay(fallingTime);
-    // Serial.println("UP Motion!"); //if the value read is low, there  was no motion 
-          
-     pirStateDown = digitalRead(pirPinDown); //read state of the PIR
-          if(pirStateDown==HIGH){
-          //Serial.println("----------CAIDA DETECTADA------------");
-          //delay(5000);
-          }
-    }else { 
-      
-      //Serial.println("UP No motion"); //if the value read was high, there was motion 
-    }
-*/
 
 }
