@@ -42,7 +42,7 @@ if (pirStateDown == HIGH) {
      Serial.println(tiempoPresenciaAnterior-tiempoPresenciaActual);
     }
     
-/*
+
 if (pirStateUp == HIGH && !possible_fall) { 
       tiempoPresenciaActual = millis();      
       Serial.println("*******************************UP Motion!****************************************");
@@ -109,10 +109,12 @@ if (pirStateDown == HIGH && possible_fall) {
     
     }
 
+    timeAfterFall=millis();
     if(Firebase.ready() && boolStateFall==true && timeAfterFall - timeFall > tresholdDisableFall){
        boolStateFall=false;
        Serial.printf("Set fall false ... %s\n", Firebase.RTDB.setBool(&fbdo, F("/fall"), boolStateFall) ? "ok" : fbdo.errorReason().c_str());
     }
+    
 
 }
 

@@ -153,9 +153,9 @@ void setup() {
 void loop() { 
   switch (input){
     case 1:
-        //temp_hum_loop();
+        temp_hum_loop();
         presence_loop();
-        //panic_loop();
+        panic_loop();
       break;
     
     case 2:

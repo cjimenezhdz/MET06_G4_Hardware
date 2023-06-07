@@ -43,6 +43,7 @@ void panic_loop() {
     tiempoPanicoAnterior = tiempoPanicoActual;
     boolStateFirebase=false;
     FirebaseRead=true;
+    sendMessage();
   }else if(tiempoPanicoActual - tiempoPanicoAnterior >= intervaloPanico) {
     digitalWrite(ledBLUE, LOW);  // turn the LED on (HIGH is the voltage level)
     boolStateFirebase = false;
