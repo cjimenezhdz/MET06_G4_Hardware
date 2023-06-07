@@ -7,12 +7,18 @@ int pirStateDown=0;
 float sensorDistance=0.31;
 float fallingTime=sqrt((2*sensorDistance)/9.8);  //1s
 
-unsigned long tiempoPresenciaAnterior = 0;
 unsigned long tiempoPresenciaActual = 0;
-const unsigned long intervaloPresencia = 5000;
+unsigned long tiempoPresenciaAnterior = 0;
 unsigned long tiempoDown=0;
+
+//-------FIREBASE DATA---------
 bool possible_fall=false;
 bool walking=false;
+bool boolStateFall=false;
+
+unsigned long timeFall = 0;
+unsigned long timeAfterFall = 0;
+const unsigned long tresholdDisableFall = 5000;
 
 void presence_setup() { 
   pinMode(pirPinDown, INPUT);
@@ -55,7 +61,7 @@ if (pirStateDown == HIGH && possible_fall) {
 
 }
 
-*/   
+*/
 
 
     if(possible_fall){
@@ -70,8 +76,17 @@ if (pirStateDown == HIGH && possible_fall) {
         Serial.println("*******************************ANDANDOOOOOOOO!****************************************");
       }else if(pirStateDown==HIGH && tiempoDown > 850 && tiempoDown < 3000){
         Serial.println(tiempoDown);
-        Serial.println("-----------------Caida DETECTADA!------------------------");   
+        Serial.println("-----------------Caida DETECTADA!------------------------"); 
         possible_fall=false;
+
+
+        if (Firebase.ready()){      
+              sendMessagePresence();
+              boolStateFall=true;
+              Serial.printf("Set fall true ... %s\n", Firebase.RTDB.setBool(&fbdo, F("/fall"), boolStateFall) ? "ok" : fbdo.errorReason().c_str());
+              timeFall=millis();
+        }
+
       }else if(tiempoDown >= 3000){
         Serial.println(tiempoDown);
         Serial.println("///////////////////NADAAAAAAA!/////////////////////");
@@ -89,10 +104,40 @@ if (pirStateDown == HIGH && possible_fall) {
         Serial.println(tiempoPresenciaAnterior);
         Serial.println("???????????????????????????????????????????????????????????????????????????????");
     }else{
-        Serial.println("..........................................................?");
+        Serial.println("....................READYYY......................");
     }
     
     }
-    
 
+    if(Firebase.ready() && boolStateFall==true && timeAfterFall - timeFall > tresholdDisableFall){
+       boolStateFall=false;
+       Serial.printf("Set fall false ... %s\n", Firebase.RTDB.setBool(&fbdo, F("/fall"), boolStateFall) ? "ok" : fbdo.errorReason().c_str());
+    }
+
+}
+
+
+
+void sendMessagePresence()
+{
+
+    Serial.print("Send Firebase Cloud Messaging... ");
+
+    // Read more details about HTTP v1 API here https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages
+    FCM_HTTPv1_JSON_Message msg;
+
+    msg.token = APN_TOKEN_1;
+
+    msg.notification.title = "CAIDA DETECTADA!";
+
+    // For the usage of FirebaseJson, see examples/FirebaseJson/BasicUsage/Create.ino
+    FirebaseJson payload;
+
+    msg.data = payload.raw();
+
+    if (Firebase.FCM.send(&fbdo, &msg)) // send message to recipient
+        Serial.printf("ok......\n%s\n\n", Firebase.FCM.payload(&fbdo).c_str());
+    else
+        Serial.println(fbdo.errorReason());
+        
 }

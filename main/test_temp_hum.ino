@@ -35,12 +35,20 @@ void temp_hum_loop() {
   
     if(t< t_min || t > t_max){
         digitalWrite(ledGREEN, HIGH);           // turn the LED on (HIGH is the voltage level)
+
+        if (Firebase.ready()){ 
+          sendMessageTemp();
+        }
+
       }else{
         digitalWrite(ledGREEN, LOW);            // turn the LED on (HIGH is the voltage level)
       }
   
     if(h< h_min || h > h_max){
         digitalWrite(led_RED, HIGH);           // turn the LED on (HIGH is the voltage level)
+        if (Firebase.ready()){ 
+          sendMessageHum();
+        }
       }else{
         digitalWrite(led_RED, LOW);            // turn the LED on (HIGH is the voltage level)
       }
@@ -61,4 +69,54 @@ void temp_hum_loop() {
       Serial.printf("Set humidity... %s\n", Firebase.RTDB.setFloat(&fbdo, F("/humidity"), h) ? "ok" : fbdo.errorReason().c_str());
     }
   }
+}
+
+
+
+void sendMessageTemp()
+{
+
+    Serial.print("Send Firebase Cloud Messaging... ");
+
+    // Read more details about HTTP v1 API here https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages
+    FCM_HTTPv1_JSON_Message msg;
+
+    msg.token = APN_TOKEN_1;
+
+    msg.notification.title = "MAXIMUM TEMPERATURE REACHED > 24!";
+
+    // For the usage of FirebaseJson, see examples/FirebaseJson/BasicUsage/Create.ino
+    FirebaseJson payload;
+
+    msg.data = payload.raw();
+
+    if (Firebase.FCM.send(&fbdo, &msg)) // send message to recipient
+        Serial.printf("ok......\n%s\n\n", Firebase.FCM.payload(&fbdo).c_str());
+    else
+        Serial.println(fbdo.errorReason());      
+}
+
+
+
+void sendMessageHum()
+{
+
+    Serial.print("Send Firebase Cloud Messaging... ");
+
+    // Read more details about HTTP v1 API here https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages
+    FCM_HTTPv1_JSON_Message msg;
+
+    msg.token = APN_TOKEN_1;
+
+    msg.notification.title = "MAXIMUM HUMIDITY REACHED > 85%!";
+
+    // For the usage of FirebaseJson, see examples/FirebaseJson/BasicUsage/Create.ino
+    FirebaseJson payload;
+
+    msg.data = payload.raw();
+
+    if (Firebase.FCM.send(&fbdo, &msg)) // send message to recipient
+        Serial.printf("ok......\n%s\n\n", Firebase.FCM.payload(&fbdo).c_str());
+    else
+        Serial.println(fbdo.errorReason());      
 }

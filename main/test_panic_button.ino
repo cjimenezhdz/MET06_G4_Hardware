@@ -35,6 +35,8 @@ void panic_loop() {
     if (Firebase.ready()){
       buttonPress=true;
       Serial.printf("Set emergency... %s\n", Firebase.RTDB.setBool(&fbdo, F("/emergency"), boolStateFirebase) ? "ok" : fbdo.errorReason().c_str());
+
+      sendMessage();
     }
   }else if(boolStateFirebase){
     digitalWrite(ledBLUE, HIGH);  // turn the LED on (HIGH is the voltage level)
@@ -51,4 +53,28 @@ void panic_loop() {
     }
   } 
 
+}
+
+void sendMessage()
+{
+
+    Serial.print("Send Firebase Cloud Messaging... ");
+
+    // Read more details about HTTP v1 API here https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages
+    FCM_HTTPv1_JSON_Message msg;
+
+    msg.token = APN_TOKEN_1;
+
+    msg.notification.title = "EMERGENCIA!";
+
+    // For the usage of FirebaseJson, see examples/FirebaseJson/BasicUsage/Create.ino
+    FirebaseJson payload;
+
+    msg.data = payload.raw();
+
+    if (Firebase.FCM.send(&fbdo, &msg)) // send message to recipient
+        Serial.printf("ok......\n%s\n\n", Firebase.FCM.payload(&fbdo).c_str());
+    else
+        Serial.println(fbdo.errorReason());
+        
 }
