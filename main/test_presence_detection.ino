@@ -27,16 +27,16 @@ void presence_setup() {
 
 void presence_loop() { 
 /*
-pirStateUp = digitalRead(pirPinUp); //read state of the PIR 
-pirStateDown = digitalRead(pirPinDown); //read state of the PIR
+//pirStateUp = digitalRead(pirPinUp); //read state of the PIR 
+//pirStateDown = digitalRead(pirPinDown); //read state of the PIR
 
-if (pirStateUp == HIGH) { 
+if (digitalRead(pirPinUp) == HIGH) { 
       tiempoPresenciaActual = millis();      
       Serial.println("*******************************UP Motion!****************************************");
       Serial.println(tiempoPresenciaActual);
     }
     
-if (pirStateDown == HIGH) { 
+if (digitalRead(pirPinDown) == HIGH) { 
      tiempoPresenciaAnterior = millis();     
      Serial.println("//////////////DOWN Motion!//////////");
      Serial.println(tiempoPresenciaAnterior-tiempoPresenciaActual);
@@ -64,17 +64,18 @@ if (pirStateDown == HIGH && possible_fall) {
 */
 
 
+
     if(possible_fall){
       
       tiempoPresenciaActual = millis();
-      pirStateDown = digitalRead(pirPinDown); //read state of the PIR
+      //pirStateDown = digitalRead(pirPinDown); //read state of the PIR
       tiempoDown = tiempoPresenciaActual - tiempoPresenciaAnterior;
       
-      if(pirStateDown==HIGH && tiempoDown <= 850){
+      if(digitalRead(pirPinDown)==HIGH && tiempoDown <= 850){
         possible_fall=false;
         Serial.println(tiempoDown);
         Serial.println("*******************************ANDANDOOOOOOOO!****************************************");
-      }else if(pirStateDown==HIGH && tiempoDown > 850 && tiempoDown < 3000){
+      }else if(digitalRead(pirPinDown)==HIGH && tiempoDown > 850 && tiempoDown < 3000){
         Serial.println(tiempoDown);
         Serial.println("-----------------Caida DETECTADA!------------------------"); 
         possible_fall=false;
@@ -95,15 +96,15 @@ if (pirStateDown == HIGH && possible_fall) {
       
     }else{
     
-    pirStateUp = digitalRead(pirPinUp); //read state of the PIR 
-    pirStateDown = digitalRead(pirPinDown); //read state of the PIR
+   // pirStateUp = digitalRead(pirPinUp); //read state of the PIR 
+    //pirStateDown = digitalRead(pirPinDown); //read state of the PIR
 
-    if (pirStateUp == HIGH && pirStateDown != HIGH) { 
+    if (digitalRead(pirPinUp) == HIGH && digitalRead(pirPinDown)!= HIGH) { 
         possible_fall=true;
         tiempoPresenciaAnterior = millis();
         Serial.println(tiempoPresenciaAnterior);
         Serial.println("???????????????????????????????????????????????????????????????????????????????");
-    }else{
+    }else if(digitalRead(pirPinUp) != HIGH && digitalRead(pirPinDown) != HIGH){
         Serial.println("....................READYYY......................");
     }
     
@@ -115,7 +116,6 @@ if (pirStateDown == HIGH && possible_fall) {
        Serial.printf("Set fall false ... %s\n", Firebase.RTDB.setBool(&fbdo, F("/fall"), boolStateFall) ? "ok" : fbdo.errorReason().c_str());
     }
     
-
 }
 
 

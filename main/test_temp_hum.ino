@@ -4,8 +4,8 @@
 #define DHTTYPE DHT22   // Sensor DHT22
 
 float t_min = 20;
-float t_max = 24;
-float h_min = 50;
+float t_max = 35;//24
+float h_min = 30;//50
 float h_max = 85;
 
 unsigned long tiempoAnterior = 0;
@@ -18,7 +18,6 @@ DHT dht(DHTPIN, DHTTYPE);
 
 void temp_hum_setup() {
   
-  Serial.println("Iniciando...");
   dht.begin();
   pinMode(ledGREEN, OUTPUT);
   pinMode(led_RED, OUTPUT);
@@ -108,7 +107,7 @@ void sendMessageHum()
 
     msg.token = APN_TOKEN_1;
 
-    msg.notification.title = "MAXIMUM HUMIDITY REACHED > 85%!";
+    msg.notification.title = "MAXIMUM/MINIMUM HUMIDITY REACHED";
 
     // For the usage of FirebaseJson, see examples/FirebaseJson/BasicUsage/Create.ino
     FirebaseJson payload;

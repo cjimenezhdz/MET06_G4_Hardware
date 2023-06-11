@@ -125,7 +125,7 @@ void setup() {
   
   Serial.println("¿Qué loop quieres generar? Escribe: \n"
     "'1' -> Emergencia temperatura/humedad, caída y botón pánico\n"
-    "'2' -> Smart Light, \n"
+    "'2' -> Smart Light\n"
     "'3' -> Grifo");
 
   // Leer la respuesta del usuario
